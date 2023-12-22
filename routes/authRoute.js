@@ -21,7 +21,7 @@ const {
 } = require("../middlewares/authMiddleware");
 
 router.post("/register/:id", registerUser);
-router.post("/register-leader", authMiddleware, isAdmin, registerLeader);
+router.post("/register-leader/:id", authMiddleware, isAdmin, registerLeader);
 router.post("/login", loginUserController);
 router.post("/admin", loginAdminController);
 router.post("/gathering-point-leader", loginGatheringPointLeaderController);
@@ -32,7 +32,7 @@ router.post(
 router.post("/edit-state/:id", authMiddleware, isPointLeader, updateUserStatus);
 
 router.get("/logout", logout);
-router.get("/all-users", authMiddleware,                                                     getAllUsers);
+router.get("/all-users", authMiddleware,    getAllUsers);
 router.get("/all-leader", authMiddleware, isAdmin, getAllLeader);
 
 router.put("/edit-user", authMiddleware, updateUser);
