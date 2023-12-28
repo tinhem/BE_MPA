@@ -18,7 +18,7 @@ const {
   authMiddleware,
   isPointLeader,
   isAdmin,
-} = require("../middlewares/authMiddleware");
+} = require("../middleware/authMiddleware");
 
 router.post("/register/:id", registerUser);
 router.post("/register-leader/:id", authMiddleware, isAdmin, registerLeader);

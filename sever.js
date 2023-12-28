@@ -1,8 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const { notFound, errorHandler } = require("./middlewares/errorHandler");
-const dbConnect = require("./config/dbConnect");
+const { notFound, errorHandler } = require("./middleware/errorHandler");
+const dbConnect = require("./config/db");
 const app = express();
 require("dotenv").config();
 const route = require("./routes/index");
@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 4000;
+
+// connect to database
 dbConnect();
 
 route(app);

@@ -6,9 +6,9 @@ const {
   getOrder,
   getAllOrder,
 } = require("../controller/orderController");
-const { authMiddleware } = require("../middlewares/authMiddleware");
+const { authMiddleware } = require("../middleware/authMiddleware");
 
-router.post("/", authMiddleware, createOrder);
+router.post("/", createOrder);
 router.get("/:id", getOrder);
 router.get("/", authMiddleware, getAllOrder);
 
