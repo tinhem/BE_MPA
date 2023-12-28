@@ -32,7 +32,7 @@ router.post(
 router.post("/edit-state/:id", authMiddleware, isPointLeader, updateUserStatus);
 
 router.get("/logout", logout);
-router.get("/all-users", authMiddleware,    getAllUsers);
+router.get("/all-users",    getAllUsers);
 router.get("/all-leader", authMiddleware, isAdmin, getAllLeader);
 
 router.put("/edit-user", authMiddleware, updateUser);

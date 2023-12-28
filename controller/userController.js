@@ -237,8 +237,8 @@ const logout = asyncHandler(async (req, res) => {
 const getAllUsers = asyncHandler(async (req, res, next) => {
   try {
     const getUsers = await User.find({
-      role: "null",
-      postOfficeId: req.user.postOfficeId,
+      // role: "null",
+      // postOfficeId: req.user.postOfficeId,
     });
     res.json(getUsers);
   } catch (err) {
