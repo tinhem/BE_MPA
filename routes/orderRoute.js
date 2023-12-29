@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createOrder,
   updateOrderLocation,
+  updateOrderStatus,
   getAllOrderInPoint,
   getAllOrderInPointAdmin,
   getAllOrderCreatePoint,
@@ -28,7 +29,9 @@ router.get(
   isAdmin,
   getAllOrderInPointAdmin
 );
-router.put("/:id", authMiddleware, updateOrderLocation);
+
+router.put("/new-location/:id", authMiddleware, updateOrderLocation);
+router.put("/status/:id", authMiddleware, updateOrderStatus);
 router.get("/:id", getOrder);
 router.get("/", authMiddleware, getAllOrder);
 

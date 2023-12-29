@@ -3,6 +3,7 @@ const Point = require("../models/pointModel");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbid");
 
+// tạo order mới
 const createOrder = asyncHandler(async (req, res) => {
   try {
     const newOrder = await Order.create(req.body);
@@ -20,7 +21,7 @@ const updateOrderLocation = asyncHandler(async (req, res, next) => {
   const { orderLocation } = req.body;
   try {
     const findPoint = await Point.findOne({ _id: orderLocation });
-    console.log(findPoint);  // In ra điểm để kiểm tra xem nó có tồn tại hay không
+    console.log(findPoint);  
 
     const updateOrder = await Order.findByIdAndUpdate(
       id,
@@ -38,6 +39,29 @@ const updateOrderLocation = asyncHandler(async (req, res, next) => {
   }
 });
 
+const updateOrderStatus = asyncHandler(async (req, res, next) => {
+  const { _id } = req.user;
+  const { id } = req.params;
+  validateMongoDbId(_id);
+  const { neworderStatus } = req.body;
+  try {
+     
+    const updateOrder = await Order.findByIdAndUpdate(
+      id,
+      {
+        orderStatus: neworderStatus,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updateOrder);
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
+//
 const getAllOrderInPoint = asyncHandler(async (req, res) => {
   const { _id, postOfficeId } = req.user;
   console.log(_id, postOfficeId);
@@ -135,6 +159,7 @@ const getAllOrder = asyncHandler(async (req, res) => {
 module.exports = {
   createOrder,
   updateOrderLocation,
+  updateOrderStatus,
   getAllOrderInPoint,
   getAllOrderInPointAdmin,
   getAllOrderCreatePoint,
