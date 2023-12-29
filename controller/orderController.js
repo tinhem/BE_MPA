@@ -11,13 +11,15 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
-
+// cập nhật trạng thái đơn hàng
 const updateOrderStatus = asyncHandler(async (req, res, next) => {
-  const { orderId, orderStatus } = req.body; // có orderId và orderStatus từ req.body
-  validateMongoDbId(orderId);
+  const { id } = req.params;
+  validateMongoDbId(id);
+  const { orderStatus } = req.body; // có orderId và orderStatus từ req.body
+  validateMongoDbId(id);
 
   try {
-    const order = await Order.findById(orderId); 
+    const order = await Order.findById(id); 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -33,6 +35,35 @@ const updateOrderStatus = asyncHandler(async (req, res, next) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+const updatetrackinginfo = asyncHandler(async (req, res, next) => {
+  const { id } = req.params; // Lấy orderId từ params
+  const { trackingInfo } = req.body; // Lấy thông tin cập nhật từ body request
+  validateMongoDbId(id);
+  try {
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    order.trackingInfo.push(trackingInfo);
+    console.log(order.trackingInfo);
+
+    try {
+      const updatedOrder = await order.save();
+      res.status(200).json({ message: 'Tracking info added successfully', order: updatedOrder });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+    
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 
 const getOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -57,6 +88,7 @@ const getAllOrder = asyncHandler(async (req, res) => {
 module.exports = {
   createOrder,
   updateOrderStatus,
+  updatetrackinginfo,
   getOrder,
   getAllOrder,
 };

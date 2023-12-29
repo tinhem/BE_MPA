@@ -3,7 +3,20 @@ const mongoose = require("mongoose"); // Erase if already required
 // Declare the Schema of the Mongo model
 // vd: pointName: điểm giao dịch
 // vd: pointAddress: vị trí cụ thể
-// vd: pointProvince: Hà Nội
+// vd: pointProvince: Hà Nội\
+
+var trackingInfoSchema = new mongoose.Schema({
+  location: { type: String, required: true },
+  status: { type: String,
+  default: "Đã gửi",
+  enum: [
+    "Đã gửi",
+   "Đã nhận"
+  ],
+  }
+});
+
+
 var orderSchema = new mongoose.Schema(
   {
     createBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -83,23 +96,14 @@ var orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      default: "Chờ lấy hàng",
+      default: "Đang vận chuyển",
       enum: [
-        "Chờ lấy hàng",
-        "Đã lấy hàng",
         "Đang vận chuyển",
-        "Chờ phát",
-        "Phát thành công",
-        "Phát không thành công",
-        "Chờ chuyển hoàn",
-        "Chuyển hoàn",
-        "Phát hoàn thành công",
-        "Chuyển tiếp",
-        "Vô thừa nhận",
-        "Đơn hàng hủy",
-        "Bồi thường",
+       "Chuyển thành công",
+       "Chuyển thất bại",
       ],
     },
+    trackingInfo: [trackingInfoSchema],
     serviceTrans: {
       type: String,
       enum: [
