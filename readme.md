@@ -44,8 +44,8 @@ http://localhost:8080/api/order/all-order-create-point      //trưởng điểm 
 http://localhost:8080/api/order/all-order-in-point-admin/:id        //admin tìm tất cả các đơn hàng có location bằng địa chỉ điểm, truyền id của point muốn tìm<br>
 
 method: put <br>
-http://localhost:8080/api/order/:id         // update vị trí hiện tại của đơn hàng bằng point id
-
+http://localhost:8080/api/order/new-location/:id        // update vị trí hiện tại của đơn hàng bằng point id <br>
+http://localhost:8080/api/order/status/:id              // cập nhật trạng thái đơn hàng
 
 
 
