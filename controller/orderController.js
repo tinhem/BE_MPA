@@ -1,4 +1,5 @@
 const Order = require("../models/orderModel");
+const Point = require("../models/pointModel");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../utils/validateMongodbid");
 
@@ -19,6 +20,8 @@ const updateOrderLocation = asyncHandler(async (req, res, next) => {
   const { orderLocation } = req.body;
   try {
     const findPoint = await Point.findOne({ _id: orderLocation });
+    console.log(findPoint);  // In ra điểm để kiểm tra xem nó có tồn tại hay không
+
     const updateOrder = await Order.findByIdAndUpdate(
       id,
       {

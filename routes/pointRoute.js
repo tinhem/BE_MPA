@@ -7,6 +7,7 @@ const {
   getAllPoint,
 } = require("../controller/pointController");
 
+
 router.post("/", createPoint);
 router.get("/:id", getPoint);
 router.get("/", getAllPoint);
