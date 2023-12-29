@@ -11,58 +11,102 @@ const createOrder = asyncHandler(async (req, res) => {
   }
 });
 
-// cập nhật trạng thái đơn hàng
-const updateOrderStatus = asyncHandler(async (req, res, next) => {
+// cập nhật vị trí đơn hàng
+const updateOrderLocation = asyncHandler(async (req, res, next) => {
+  const { _id } = req.user;
   const { id } = req.params;
-  validateMongoDbId(id);
-  const { orderStatus } = req.body; // có orderId và orderStatus từ req.body
-  validateMongoDbId(id);
-
+  validateMongoDbId(_id);
+  const { orderLocation } = req.body;
   try {
-    const order = await Order.findById(id); 
-    if (!order) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    // Cập nhật trạng thái đơn hàng
-    order.orderStatus = orderStatus;
-
-    const updatedOrder = await order.save();
-    res.json(updatedOrder);
+    const findPoint = await Point.findOne({ _id: orderLocation });
+    const updateOrder = await Order.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        orderLocation: findPoint.pointAddress,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updateOrder);
   } catch (err) {
-    // Xử lý lỗi và trả về phản hồi lỗi
-    console.error(err);
-    res.status(500).json({ message: "Internal Server Error" });
+    throw new Error(err);
   }
 });
 
-const updatetrackinginfo = asyncHandler(async (req, res, next) => {
-  const { id } = req.params; // Lấy orderId từ params
-  const { trackingInfo } = req.body; // Lấy thông tin cập nhật từ body request
-  validateMongoDbId(id);
+const getAllOrderInPoint = asyncHandler(async (req, res) => {
+  const { _id, postOfficeId } = req.user;
+  console.log(_id, postOfficeId);
+  validateMongoDbId(_id);
   try {
-    const order = await Order.findById(id);
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    order.trackingInfo.push(trackingInfo);
-    console.log(order.trackingInfo);
-
-    try {
-      const updatedOrder = await order.save();
-      res.status(200).json({ message: 'Tracking info added successfully', order: updatedOrder });
-    } catch (error) {
-      console.error(error);
-      next(error);
-    }
-    
+    console.log(_id, postOfficeId);
+    const findPoint = await Point.findOne({ _id: postOfficeId });
+    console.log(findPoint);
+    const getAllOrderInPoint = await Order.find({
+      orderLocation: findPoint.pointAddress,
+    });
+    res.json(getAllOrderInPoint);
   } catch (error) {
-    console.error(error);
-    next(error);
+    throw new Error(error);
   }
 });
+
+const getAllOrderInPointAdmin = asyncHandler(async (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const findPoint = await Point.findOne({ _id: id });
+    console.log(findPoint);
+    const getAllOrderInPoint = await Order.find({
+      orderLocation: findPoint.pointAddress,
+    });
+    res.json(getAllOrderInPoint);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getAllOrderCreatePoint = asyncHandler(async (req, res) => {
+  const { _id, postOfficeId } = req.user;
+  console.log(_id, postOfficeId);
+  validateMongoDbId(_id);
+  try {
+    console.log(_id, postOfficeId);
+    const findPoint = await Point.findOne({ _id: postOfficeId });
+    console.log(findPoint);
+    const getAllOrderInPoint = await Order.find({
+      originalLocation: findPoint.pointAddress,
+    });
+    res.json(getAllOrderInPoint);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// const updatetrackinginfo = asyncHandler(async (req, res, next) => {
+//   const { _id } = req.user;
+//   const { id } = req.params;
+//   validateMongoDbId(_id);
+//   const { orderLocation } = req.body;
+//   try {
+//     const findPoint = await Point.findOne({ _id: orderLocation });
+//     const updateOrder = await Order.findByIdAndUpdate(
+//       id,
+//       {
+//         ...req.body,
+//         orderLocation: findPoint.pointAddress,
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.json(updateOrder);
+//   } catch (err) {
+//     throw new Error(err);
+//   }
+// });
 
 
 const getOrder = asyncHandler(async (req, res) => {
@@ -87,8 +131,10 @@ const getAllOrder = asyncHandler(async (req, res) => {
 
 module.exports = {
   createOrder,
-  updateOrderStatus,
-  updatetrackinginfo,
+  updateOrderLocation,
+  getAllOrderInPoint,
+  getAllOrderInPointAdmin,
+  getAllOrderCreatePoint,
   getOrder,
   getAllOrder,
 };

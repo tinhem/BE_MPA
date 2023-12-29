@@ -5,23 +5,13 @@ const mongoose = require("mongoose"); // Erase if already required
 // vd: pointAddress: vị trí cụ thể
 // vd: pointProvince: Hà Nội\
 
-var trackingInfoSchema = new mongoose.Schema({
-  location: { type: String, required: true },
-  status: { type: String,
-  default: "Đã gửi",
-  enum: [
-    "Đã gửi",
-   "Đã nhận"
-  ],
-  }
-});
-
 
 var orderSchema = new mongoose.Schema(
   {
     createBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    senderInfo: {
+    originalLocation: {
       type: String,
+      required: true,
     },
     senderName: {
       type: String,
@@ -91,8 +81,8 @@ var orderSchema = new mongoose.Schema(
       type: String,
     },
     orderLocation: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Point",
+      type: String,
+      required: true,
     },
     orderStatus: {
       type: String,
@@ -103,7 +93,6 @@ var orderSchema = new mongoose.Schema(
        "Chuyển thất bại",
       ],
     },
-    trackingInfo: [trackingInfoSchema],
     serviceTrans: {
       type: String,
       enum: [

@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   registerUser,
   registerLeader,
-  loginUserController,
+  loginAssemblypointstaffController,
+  loginTransactionpointstaffController,
   loginAdminController,
   loginGatheringPointLeaderController,
   loginHeadOfTransactionPointController,
@@ -22,7 +23,8 @@ const {
 
 router.post("/register/:id", registerUser);
 router.post("/register-leader/:id", authMiddleware, isAdmin, registerLeader);
-router.post("/login", loginUserController);
+router.post("/login-Transactionpointstaff", loginTransactionpointstaffController);
+router.post("/login-Assemblypointstaff", loginAssemblypointstaffController);
 router.post("/admin", loginAdminController);
 router.post("/gathering-point-leader", loginGatheringPointLeaderController);
 router.post(
